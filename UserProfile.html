@@ -19,6 +19,9 @@
                     text-decoration: none;
                     border-line:2px;
                 }
+                .silent{
+                    display none;
+                }
             </style>
     </head>
     <body>
@@ -34,10 +37,22 @@
             </nav>
         </main>
         <section id="#PersonalDetails">
-            <h2>Personal details</h2>
-            <p>Name: <span id="name">_</p>
-            <p>Surname: <span id="sname">_</p>
-            <a></a>
+            <div id="#PersonalDetails" class="silent">
+                <h2>Personal details</h2>
+                <p>Name: <span id="name"></p>
+                <p>Surname: <span id="sname"></p>
+                <p>Username:<span id="uname"></p>
+                <p>Task:<span id="task"></p>
+            </div>
+            <div id="#Interests" class="silent">
+                <h3>Interests</h3>
+                <p>1st Interest:<span id=interest1></span></p>
+                <p>2st Interest:<span id=interest2></span></p>
+                <p>3st Interest:<span id=interest3></span></p>
+            </div>
+            <div id="#Actions" class="silent">
+                <h3>Tasks</h3>
+            </div>
         </section>
         <footer>
             
