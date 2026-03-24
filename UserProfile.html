@@ -214,10 +214,10 @@
                 interest3S.textContent = profileStrata.Step2.interest3;
 
                 // STEP 3 missing fields
-                for (let key in profileStrata.Step3) {
-                    if (!profileStrata.Step3[key]) {
-                        const value = prompt(`Enter your ${key}:`);
-                        if (value) profileStrata.Step3[key] = value;
+                for (let i in profileStrata.Step3) {
+                    if (!profileStrata.Step3[i]) {
+                        const value = prompt(`Enter your ${i}:`);
+                        if (value) profileStrata.Step3[i] = value;
                     }
                 }
 
