@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>User Profile Page</title>
         <style>
+                main{
+                    background-color: white;
+                }
                 
                 nav ul {
                     list-style: none;
@@ -19,9 +22,11 @@
                     text-decoration: none;
                     border-line:2px;
                 }
-                .silent{
-                    display none;
+                
+                .hidden{
+                    display: none;
                 }
+                
             </style>
     </head>
     <body>
@@ -36,90 +41,198 @@
                     <li><a href="#Other">Other</a></li>
                 </ul>
             </nav>
-        </main>
+        
             <section id="profile-builder">
                 <h2>Create Your Profile</h2>
                 <button id="start">Start Updating your Profile</button>
-            <section id="Profile">
-                <div id="#Step1" class="hidden">
-                    <h2>Personal details</h2>
-                    <p>Name: <span id="name"></p>
-                    <p>Surname: <span id="sname"></p>
-                    <p>Username: <span id="uname"></p>
-                    <p>Task: <span id="task"></p>
-                </div>
-                <div id="#Step2" class="hidden">
-                    <h3>Interests</h3>
-                    <p>1st Interest:<span id=interest1></span></p>
-                    <p>2st Interest:<span id=interest2></span></p>
-                    <p>3st Interest:<span id=interest3></span></p>
-                </div>
-                <div id="#Step3" class="hidden">
-                    <h3>Tasks</h3>
-                    <p>Task 1:<span id="t1"></span></p>
-                    <p>Task 2:<span id="t2"></span></p>
-                    <p>Task 3:<span id="t3"></span></p>
-                </div>
-                <div id="#Other" class="hidden">
-                    <h3>Other</h4>
-                    <p>Extra Info:<span id ="extra"></span></p>
-                    <button id="editBtn">Return to Skipped Steps</button>
-                </div>
+                <div id=progress></div>
+                
+                <section id="Profile">
+                    <div id="Step1" class="hidden">
+                        <h2>Personal details</h2>
+                        <p>Name: <span id="name"></span></p>
+                        <p>Surname: <span id="sname"></span></p>
+                        <p>Username: <span id="uname"></span></p>
+                        <p>Task: <span id="task"></span></p>
+                    </div>
+                    <div id="Step2" class="hidden">
+                        <h3>Interests</h3>
+                        <p>1st Interest:<span id=interest1></span></p>
+                        <p>2st Interest:<span id=interest2></span></p>
+                        <p>3st Interest:<span id=interest3></span></p>
+                    </div>
+                    <div id="Step3" class="hidden">
+                        <h3>Tasks</h3>
+                        <p>Task 1:<span id="t1"></span></p>
+                        <p>Task 2:<span id="t2"></span></p>
+                        <p>Task 3:<span id="t3"></span></p>
+                    </div>
+                    <div id="Other" class="hidden">
+                        <h3>Other</h3>
+                        <p>Extra Info:<span id ="extra"></span></p>
+                        <button id="editBtn">Return to Skipped Steps</button>
+                    </div>
+                </section>
             </section>
+        </main>
         <footer>
             
         </footer>
         <script>
-            const profileStrata={//profile information store
-                Step1:{name:"",sname:"",uname:"",task:""}
-                Step2:{interest1:"",interest2:"",interest3:""}
-                step3:{t1:"",t2:"",t3:""}
+            const profileStrata = {
+                Step1: { name:"", sname:"", uname:"", task:"" },
+                Step2: { interest1:"", interest2:"", interest3:"" },
+                Step3: { t1:"", t2:"", t3:"" },
+                Other: { extra:"" }
             };
-            function renderStep(stepNumber) {
-              const Steps = document.getElementById("step{stepNumber}Output");
-              const data = profileDat["step{stepNumber}"];
-            
-              Steps.innerHTML = "";
-            
-              for (let i in data) {
-                if (data[i]) {
-                  const p = document.createElement("p");
-                  p.textContent = "{i}: {data[i]}";
-                  stepDiv.appendChild(p);
-                }
-              }
-                
-                  stepDiv.classListremove("hidden");
-            }
-            function update() {
-              let filled = 0;
-              let total = 9;
-            
-              Object.values(profileStrata).forEach(step => {
-                Object.values(step).forEach(value => {
-                  if (value) filled++;
-                });
-              });
-            
-              const percent = Math.round((filled / total) * 100);
-              document.getElementById("progress").textContent =
-                "Profile Completion: {percent}";
-            }
-            function Skipped() {//the remaining steps that wouldve been skipped and need to be implement
-              for (let step = 1; step <= 3; step++) {
-                const data = profileStrata["step{step}"];
-                for (let i in data) {//checking information
-                  if (!data[i]) {//turns data false
-                    const value = prompt("Enter value for {i}:");
-                    if (value) data[i] = value;//checks to see if there is a new step
-                   }
-                  }
-                  renderStep(step);
-                }
-                updateProgress();
+            // Step 2 spans
+            const interest1S = document.getElementById("interest1");
+            const interest2S = document.getElementById("interest2");
+            const interest3S = document.getElementById("interest3");
+
+            // Step 3 spans
+            const t1S = document.getElementById("t1");
+            const t2S = document.getElementById("t2");
+            const t3S = document.getElementById("t3");
+
+            // Other
+            const extraS = document.getElementById("extra");
+
+
+            function showStep(stepId){
+                document.getElementById(stepId).classList.remove("hidden");
             }
 
-            
+            function update() {
+                let filled = 0;
+                let total = 10;
+
+                Object.values(profileStrata).forEach(step => {
+                    Object.values(step).forEach(value => {
+                        if (value) filled++;
+                    });
+                });
+
+                const percent = Math.round((filled / total) * 100);
+                document.getElementById("progress").textContent =
+                    `Profile Completion: ${percent}%`;
+            }
+
+            function step1Prompts() {
+                profileStrata.Step1.name = prompt("Enter your first name:") || "";
+                profileStrata.Step1.sname = prompt("Enter your surname:") || "";
+                profileStrata.Step1.uname = prompt("Choose a username:") || "";
+                profileStrata.Step1.task = prompt("What is your main task or role?") || "";
+
+                document.getElementById("name").textContent = profileStrata.Step1.name;
+                document.getElementById("sname").textContent = profileStrata.Step1.sname;
+                document.getElementById("uname").textContent = profileStrata.Step1.uname;
+                document.getElementById("task").textContent = profileStrata.Step1.task;
+                //apperance
+                showStep("Step1");
+                //modify
+                update();
+                //next step
+                step2Prompts();
+            }
+
+            document.getElementById("start").addEventListener("click", step1Prompts);
+
+            function step2Prompts(){
+                profileStrata.Step2.interest1 = prompt("Enter your first interest:") || "";
+                profileStrata.Step2.interest2 = prompt("Enter your second interest:") || "";
+                profileStrata.Step2.interest3 = prompt("Enter your third interest:") || "";
+
+                // Update the DOM
+                interest1S.textContent = profileStrata.Step2.interest1;
+                interest2S.textContent = profileStrata.Step2.interest2;
+                interest3S.textContent = profileStrata.Step2.interest3;
+
+                // Appearance of Step 2
+                showStep("Step2");
+
+                // Update of progress
+                update();
+
+                // continuation to step 3
+                step3Prompts();
+
+            }
+            function step3Prompts(){
+                profileStrata.Step3.t1 = prompt("Enter your first task:") || "";
+                profileStrata.Step3.t2 = prompt("Enter your second task:") || "";
+                profileStrata.Step3.t3 = prompt("Enter your third task:") || "";
+
+                t1S.textContent = profileStrata.Step3.t1;
+                t2S.textContent = profileStrata.Step3.t2;
+                t3S.textContent = profileStrata.Step3.t3;
+
+                showStep("Step3");
+                update();
+                showStep("Other");
+            }
+            function otherPrompt(){
+                profileStrata.Other.extra = prompt("Enter your other information:") || "";
+                // Update the DOM
+                extraS.textContent = profileStrata.Other.extra;
+                
+
+                // Appearance of other
+                showStep("Other");
+
+                // Update of progress again
+                update();
+
+            }
+            document.getElementById("editBtn").addEventListener("click", editSkipped);
+            function editSkipped() {
+                // STEP 1 missing fields
+                for (let key in profileStrata.Step1) {
+                    if (!profileStrata.Step1[key]) {
+                        const value = prompt(`Enter your ${key}:`);
+                        if (value) profileStrata.Step1[key] = value;
+                    }
+                }
+
+                // Update Step 1 DOM
+                nameS.textContent = profileStrata.Step1.name;
+                snameS.textContent = profileStrata.Step1.sname;
+                unameS.textContent = profileStrata.Step1.uname;
+                taskS.textContent = profileStrata.Step1.task;
+
+                // STEP 2 missing fields
+                for (let key in profileStrata.Step2) {
+                    if (!profileStrata.Step2[key]) {
+                        const value = prompt(`Enter your ${key}:`);
+                        if (value) profileStrata.Step2[key] = value;
+                    }
+                }
+
+                // Update Step 2 DOM
+                interest1S.textContent = profileStrata.Step2.interest1;
+                interest2S.textContent = profileStrata.Step2.interest2;
+                interest3S.textContent = profileStrata.Step2.interest3;
+
+                // STEP 3 missing fields
+                for (let key in profileStrata.Step3) {
+                    if (!profileStrata.Step3[key]) {
+                        const value = prompt(`Enter your ${key}:`);
+                        if (value) profileStrata.Step3[key] = value;
+                    }
+                }
+
+                // Update Step 3 DOM
+                t1S.textContent = profileStrata.Step3.t1;
+                t2S.textContent = profileStrata.Step3.t2;
+                t3S.textContent = profileStrata.Step3.t3;
+
+                // Update progress
+                update();
+            }
+        
+
         </script>
+
     </body>
+
 </html>
