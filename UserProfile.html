@@ -63,20 +63,21 @@
                 <div id="#Other" class="hidden">
                     <h3>Other</h4>
                     <p>Extra Info:<span id ="extra"></span></p>
+                    <button id="editBtn">Return to Skipped Steps</button>
                 </div>
             </section>
         <footer>
             
         </footer>
         <script>
-            const profileStrata={
+            const profileStrata={//profile information store
                 Step1:{name:"",sname:"",uname:"",task:""}
                 Step2:{interest1:"",interest2:"",interest3:""}
                 step3:{t1:"",t2:"",t3:""}
             };
             function renderStep(stepNumber) {
               const Steps = document.getElementById("step{stepNumber}Output");
-              const data = profileDat["step${stepNumber}"];
+              const data = profileDat["step{stepNumber}"];
             
               Steps.innerHTML = "";
             
@@ -88,8 +89,36 @@
                 }
               }
                 
-                  stepDiv.classList.remove("hidden");
+                  stepDiv.classListremove("hidden");
             }
+            function update() {
+              let filled = 0;
+              let total = 9;
+            
+              Object.values(profileStrata).forEach(step => {
+                Object.values(step).forEach(value => {
+                  if (value) filled++;
+                });
+              });
+            
+              const percent = Math.round((filled / total) * 100);
+              document.getElementById("progress").textContent =
+                "Profile Completion: {percent}";
+            }
+            function Skipped() {//the remaining steps that wouldve been skipped and need to be implement
+              for (let step = 1; step <= 3; step++) {
+                const data = profileStrata["step{step}"];
+                for (let i in data) {//checking information
+                  if (!data[i]) {//turns data false
+                    const value = prompt("Enter value for {i}:");
+                    if (value) data[i] = value;//checks to see if there is a new step
+                   }
+                  }
+                  renderStep(step);
+                }
+                updateProgress();
+            }
+
             
         </script>
     </body>
