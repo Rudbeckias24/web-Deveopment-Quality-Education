@@ -272,21 +272,20 @@
             
             function editSkipped() {
                 // STEP 1 missing fields
-                for (let key in profileStrata.Step1) {
-
-                    if (skipped.Step2) {
+                if (skipped.Step2) {
                         skipped.Step2 = false;
                         step2Prompts();
                     }
-                    if (skipped.Step3) {
+                if (skipped.Step3) {
                         skipped.Step3 = false;
                         step3Prompts();
                     }
-                    if (skipped.Other) {
+                if (skipped.Other) {
                         skipped.Other = false;
                         otherPrompt();
                     }
 
+                for (let key in profileStrata.Step1) {
                     if (!profileStrata.Step1[key]) {
                         const value = prompt(`Enter your ${key}:`);
                         if (value) profileStrata.Step1[key] = value;
