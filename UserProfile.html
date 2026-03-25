@@ -8,14 +8,24 @@
                 main{
                     background-color: white;
                 }
-                navy blue and white
+                
                 body{
                     background-color:white;
                     font-family:'Franklin Gothic Medium';
                     margin:0;
                     padding:0;
+                    color:navy;
 
                 }
+               header{
+                   background-color:#1c2e4a;
+                   color: white;
+                   padding: 25px;
+                   font-size:
+                   
+                   
+                   
+               }
 
                 
                 
@@ -45,7 +55,8 @@
             </style>
     </head>
     <body>
-        <header>UserProfile</header>
+        <header>Quality Education</header>
+        
         <main>
             
             <nav>
@@ -57,7 +68,7 @@
                 </ul>
             </nav>
         
-            <section id="profile-builder">
+            <section id="profile-builder" class="hidden">
                 <h2>Create Your Profile</h2>
                 <button id="start">Start Updating your Profile</button>
                 <div id=progress></div>
@@ -120,7 +131,7 @@
 
             function update() {
                 let filled = 0;
-                let total = 10;
+                let total = 11;
 
                 Object.values(profileStrata).forEach(step => {
                     Object.values(step).forEach(value => {
@@ -153,6 +164,12 @@
 
             document.getElementById("start").addEventListener("click", step1Prompts);
 
+            if(!confirm("Do you want to continue to Step 2?")){
+                update();
+                step3Prompts();
+                return;
+            }
+            
             function step2Prompts(){
                 profileStrata.Step2.interest1 = prompt("Enter your first interest:") || "";
                 profileStrata.Step2.interest2 = prompt("Enter your second interest:") || "";
@@ -172,6 +189,12 @@
                 // continuation to step 3
                 step3Prompts();
 
+                if(!confirm("Do you want to continue to Step 3?")){
+                update();
+                otherPrompt();
+                return;
+            }
+                
             }
             function step3Prompts(){
                 profileStrata.Step3.t1 = prompt("Enter your first task:") || "";
@@ -208,6 +231,11 @@
                         if (value) profileStrata.Step1[key] = value;
                     }
                 }
+                
+                const nameS = document.getElementById("name");
+                const snameS = document.getElementById("sname");
+                const unameS = document.getElementById("uname");
+                const taskS = document.getElementById("task");
 
                 // Update Step 1 DOM
                 nameS.textContent = profileStrata.Step1.name;
