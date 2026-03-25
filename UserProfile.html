@@ -17,41 +17,73 @@
                     color:navy;
 
                 }
-               header{
+                section{
+                    margin-bottom: 25px;
+                    padding: 20px;
+                    border: 1.5px solid rgb(161, 168, 202);
+                }
+                header{
                    background-color:#1c2e4a;
                    color: white;
                    padding: 25px;
-                   font-size:
-                   
-                   
-                   
+                   font-size:20px;
+                   font-weight:bold;
                }
-
-                
+            
+                #progress{
+                    text-align: right;
+                    font-size: 19.5px;
+                    font-weight:lighter;
+                    color:#1c2e4a;
+                }
                 
                 nav ul {
                     list-style: none;
                     padding: 0;
                     margin: 0 0 20px;
                     text-align: center;
+                    
                     }
 
                 nav li {
                     display: inline-block;
                     margin: 0 10px;
                     text-decoration: none;
-                    border-line:2px;
+                    border:2px;
+                }
+
+                nav a:hover{
+                    background-color:rgb(33, 33, 112,0.5);
+                    border-radius:7.5px;
+                    border-width: 20px;
+                    
                 }
                 
                 .hidden{
                     display: none;
                 }
                 button{
+                    margin-top:5px;
+                    position:relative;
                     background-color: navy;
                     color:aliceblue;
-                    
+                    padding:15px 30px;
+                    text-align: right;
+                    border:none;
+                    border-radius: 25px;                   
+                }
+
+                button:hover{
+                    background-color:#1d3b6b;
                 }
                 
+                footer{
+                    padding:15px;
+                    margin-top: 35px;
+                    color:white;
+                    background-color: #1d3b6b;
+                    text-align: center;
+                }
             </style>
     </head>
     <body>
@@ -61,19 +93,18 @@
             
             <nav>
                 <ul>
-                    <li><a href="#Step1">Personal Details</a></li>
-                    <li><a href="#Step2">Interests</a></li>
-                    <li><a href="#Step3">Tasks</a></li>
+                    <li><a href="#Profile">Personal Details</a></li>
+                    <li><a href="#Interests">Interests</a></li>
+                    <li><a href="#Tasks">Tasks</a></li>
                     <li><a href="#Other">Other</a></li>
                 </ul>
             </nav>
         
-            <section id="profile-builder" class="hidden">
+            <section id="Profile">
                 <h2>Create Your Profile</h2>
-                <button id="start">Start Updating your Profile</button>
+                <button id="start">Start your Profile</button>
+                <button id="editBtn">Return to Skipped Steps</button>
                 <div id=progress></div>
-                
-                <section id="Profile">
                     <div id="Step1" class="hidden">
                         <h2>Personal details</h2>
                         <p>Name: <span id="name"></span></p>
@@ -83,9 +114,9 @@
                     </div>
                     <div id="Step2" class="hidden">
                         <h3>Interests</h3>
-                        <p>1st Interest:<span id=interest1></span></p>
-                        <p>2st Interest:<span id=interest2></span></p>
-                        <p>3st Interest:<span id=interest3></span></p>
+                        <p>1st Interest:<span id="interest1"></span></p>
+                        <p>2st Interest:<span id="interest2"></span></p>
+                        <p>3st Interest:<span id="interest3"></span></p>
                     </div>
                     <div id="Step3" class="hidden">
                         <h3>Tasks</h3>
@@ -96,13 +127,14 @@
                     <div id="Other" class="hidden">
                         <h3>Other</h3>
                         <p>Extra Info:<span id ="extra"></span></p>
-                        <button id="editBtn">Return to Skipped Steps</button>
+                        
                     </div>
                 </section>
+                
             </section>
+
         </main>
         <footer>
-            
         </footer>
         <script>
             const profileStrata = {
@@ -111,6 +143,7 @@
                 Step3: { t1:"", t2:"", t3:"" },
                 Other: { extra:"" }
             };
+            let skipped={Step1:false, Step2:false,Step3:false,Other:false};
             // Step 2 spans
             const interest1S = document.getElementById("interest1");
             const interest2S = document.getElementById("interest2");
@@ -140,15 +173,15 @@
                 });
 
                 const percent = Math.round((filled / total) * 100);
-                document.getElementById("progress").textContent =
-                    `Profile Completion: ${percent}%`;
+                document.getElementById("progress").textContent =`Profile Completion: ${percent}%`;
             }
 
             function step1Prompts() {
+                
                 profileStrata.Step1.name = prompt("Enter your first name:") || "";
                 profileStrata.Step1.sname = prompt("Enter your surname:") || "";
                 profileStrata.Step1.uname = prompt("Choose a username:") || "";
-                profileStrata.Step1.task = prompt("What is your main task or role?") || "";
+                profileStrata.Step1.task = prompt("What is your main role?") || "";
 
                 document.getElementById("name").textContent = profileStrata.Step1.name;
                 document.getElementById("sname").textContent = profileStrata.Step1.sname;
@@ -156,21 +189,24 @@
                 document.getElementById("task").textContent = profileStrata.Step1.task;
                 //apperance
                 showStep("Step1");
-                //modify
                 update();
+
+
+                if(!confirm("Do you want to continue to Step 2?")){
+                    skipped.Step2=true;
+                    step3Prompts();
+                    return;
+                }else{
                 //next step
                 step2Prompts();
+                }
             }
 
             document.getElementById("start").addEventListener("click", step1Prompts);
-
-            if(!confirm("Do you want to continue to Step 2?")){
-                update();
-                step3Prompts();
-                return;
-            }
+                
             
             function step2Prompts(){
+
                 profileStrata.Step2.interest1 = prompt("Enter your first interest:") || "";
                 profileStrata.Step2.interest2 = prompt("Enter your second interest:") || "";
                 profileStrata.Step2.interest3 = prompt("Enter your third interest:") || "";
@@ -186,17 +222,21 @@
                 // Update of progress
                 update();
 
+
+                if(!confirm("Do you want to continue to Step 3?")){
+                    skipped.Step3 =true;
+                    othePrompt();
+                    return;
+                }
+
                 // continuation to step 3
                 step3Prompts();
 
-                if(!confirm("Do you want to continue to Step 3?")){
-                update();
-                otherPrompt();
-                return;
-            }
+                
                 
             }
             function step3Prompts(){
+                //usage of prompt()
                 profileStrata.Step3.t1 = prompt("Enter your first task:") || "";
                 profileStrata.Step3.t2 = prompt("Enter your second task:") || "";
                 profileStrata.Step3.t3 = prompt("Enter your third task:") || "";
@@ -207,35 +247,52 @@
 
                 showStep("Step3");
                 update();
-                showStep("Other");
+
+                //Ask if they ant to continue to Other
+                if(!confirm("Do you want to continue to Others:")){
+                    return;//stop here
+                }
+                //Continue to Other
+                otherPrompt();
             }
+
             function otherPrompt(){
                 profileStrata.Other.extra = prompt("Enter your other information:") || "";
                 // Update the DOM
                 extraS.textContent = profileStrata.Other.extra;
-                
 
                 // Appearance of other
                 showStep("Other");
-
                 // Update of progress again
                 update();
 
             }
             document.getElementById("editBtn").addEventListener("click", editSkipped);
+            
+            
             function editSkipped() {
                 // STEP 1 missing fields
                 for (let key in profileStrata.Step1) {
+
+                    if (skipped.Step2) {
+                        skipped.Step2 = false;
+                        step2Prompts();
+                    }
+                    if (skipped.Step3) {
+                        skipped.Step3 = false;
+                        step3Prompts();
+                    }
+                    if (skipped.Other) {
+                        skipped.Other = false;
+                        otherPrompt();
+                    }
+
                     if (!profileStrata.Step1[key]) {
                         const value = prompt(`Enter your ${key}:`);
                         if (value) profileStrata.Step1[key] = value;
                     }
                 }
                 
-                const nameS = document.getElementById("name");
-                const snameS = document.getElementById("sname");
-                const unameS = document.getElementById("uname");
-                const taskS = document.getElementById("task");
 
                 // Update Step 1 DOM
                 nameS.textContent = profileStrata.Step1.name;
@@ -269,6 +326,10 @@
                 t2S.textContent = profileStrata.Step3.t2;
                 t3S.textContent = profileStrata.Step3.t3;
 
+
+                //Update Other DOM
+                extraS.textContent=profileStrata.Other.other
+
                 // Update progress
                 update();
             }
@@ -279,3 +340,4 @@
     </body>
 
 </html>
+
